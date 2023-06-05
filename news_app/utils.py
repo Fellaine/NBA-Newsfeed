@@ -65,9 +65,40 @@ def get_r_nba_news(limit: int = 6):
     return res
 
 
+def get_yahoo_news():
+    session = HTMLSession()
+    r = session.get("https://sports.yahoo.com/nba/")
+    main_article = r.html.find("._ys_13mq8u1")
+    main_title, main_content = main_article[0].text.split("\n")
+    res = [
+        {
+            "title": main_title,
+            "content": main_content,
+            "url": main_article[0].absolute_links.pop(),
+        }
+    ]
+    secondary_articles = r.html.find("._ys_hudz05")
+    for article in secondary_articles:
+        res.append(
+            {
+                "title": article.text,
+                "content": "",
+                "url": article.absolute_links.pop(),
+            }
+        )
+    li_articles = r.html.find(".js-stream-content")
+    for article in li_articles:
+        article_ = {}
+        _, article_["title"], article_["content"] = article.text.split("\n")
+        article_["url"] = article.absolute_links.pop()
+        res.append(article_)
+    return res
+
+
 # pretty = json.dumps(get_espn_news(), indent=4)
 # print(pretty)
 # print(get_espn_news(10))
 # print(get_nba_com_news())
 # print(json.dumps(get_nba_com_news(), indent=4))
-print(json.dumps(get_r_nba_news(), indent=4))
+# print(json.dumps(get_r_nba_news(), indent=4))
+print(json.dumps(get_yahoo_news(), indent=4))
