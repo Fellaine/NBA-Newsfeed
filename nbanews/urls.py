@@ -17,9 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from news_app.views import ArticleListView
+from news_app.views import ArticleListView, scrape_articles
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", ArticleListView.as_view()),
+    path("scrape/", scrape_articles),
 ]
