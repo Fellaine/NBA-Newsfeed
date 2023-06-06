@@ -4,6 +4,8 @@ from typing import Literal
 import requests
 from requests_html import HTMLSession
 
+from .models import Source
+
 
 def get_espn_news(limit: int = 6) -> list[dict] | Literal[0]:
     """
@@ -119,6 +121,32 @@ def get_r_nba_news():
             }
         )
     return res
+
+
+def get_all_articles():
+    espn_articles = get_espn_news()
+    if espn_articles == 0:
+        return []
+    espn_source = Source.objects.get(id=1)
+    for article in espn_articles:
+        article["source_id"] = espn_source
+
+    nba_com_articles = get_nba_com_news()
+    nba_com_source = Source.objects.get(id=2)
+    for article in nba_com_articles:
+        article["source_id"] = nba_com_source
+
+    yahoo_articles = get_yahoo_news()
+    yahoo_source = Source.objects.get(id=3)
+    for article in yahoo_articles:
+        article["source_id"] = yahoo_source
+
+    r_nba_articles = get_r_nba_news()
+    r_nba_source = Source.objects.get(id=4)
+    for article in r_nba_articles:
+        article["content"] = article["content"].replace("\\n", " ")
+        article["source_id"] = r_nba_source
+    return espn_articles + nba_com_articles + yahoo_articles + r_nba_articles
 
 
 # print("ESPN NEWS: ")
