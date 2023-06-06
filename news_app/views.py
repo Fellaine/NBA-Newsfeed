@@ -7,3 +7,4 @@ class ArticleListView(ListView):
     model = Article
     template_name = "templates/news_app/article-list.html"
     paginate_by = 30
+    ordering = ["-id"]
