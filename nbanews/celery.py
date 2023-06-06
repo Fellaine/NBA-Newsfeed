@@ -11,7 +11,7 @@ app.autodiscover_tasks()
 
 
 app.conf.beat_schedule = {
-    "scrape (every 5 mins)": {
+    "scrape (every 10 mins)": {
         "task": "news_app.tasks.scrape_articles",
         "schedule": crontab(minute="*/10"),
     },
