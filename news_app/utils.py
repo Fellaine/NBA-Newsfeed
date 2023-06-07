@@ -1,4 +1,4 @@
-from typing import Literal
+from typing import Any, Literal
 
 import requests
 from requests_html import HTMLSession
@@ -7,9 +7,14 @@ from .models import Source
 
 
 def get_espn_news(limit: int = 6) -> list[dict] | Literal[0]:
-    """
-    Get list of espn news with len = limit.
-    If 404 return 0.
+    """Get nba articles from espn.com
+
+    Args:
+        limit (int, optional): maximum number of articles to retrieve. Defaults to 6.
+
+    Returns:
+        list[dict] | Literal[0]: each dict contains article's title, content, and URL.
+        If error returns 0
     """
     r = requests.get(
         f"http://site.api.espn.com/apis/site/v2/sports/basketball/nba/news?limit={limit}"  # noqa
@@ -28,7 +33,12 @@ def get_espn_news(limit: int = 6) -> list[dict] | Literal[0]:
     return res
 
 
-def get_nba_com_news():
+def get_nba_com_news() -> list[dict]:
+    """Scrape news articles from nba.com
+
+    Returns:
+        list[dict]: each dict contains single article's title, content, and URL.
+    """
     session = HTMLSession()
     r = session.get("https://www.nba.com/news")
     articles = r.html.find(".ArticleTile_tile__y70gI")
@@ -44,7 +54,16 @@ def get_nba_com_news():
     return res
 
 
-def get_r_nba_news_throttled(limit: int = 6):
+def get_r_nba_news_throttled(limit: int = 6) -> list[dict] | Literal[0]:
+    """Get articles from nba subreddit
+
+    Args:
+        limit (int, optional): number of articles to retrieve. Defaults to 6.
+
+    Returns:
+        list[dict] | Literal[0]: each dict contains article's title, content, and URL.
+        If error returns 0
+    """
     r = requests.get(f"https://www.reddit.com/r/nba/top/.json?count={limit}")
     if r.status_code != 200:
         return 0
@@ -66,7 +85,12 @@ def get_r_nba_news_throttled(limit: int = 6):
     return res
 
 
-def get_yahoo_news():
+def get_yahoo_news() -> list[dict]:
+    """Scrape news articles from nba.com
+
+    Returns:
+        list[dict]: each dict contains single article's title, content, and URL.
+    """
     session = HTMLSession()
     r = session.get("https://sports.yahoo.com/nba/")
     main_article = r.html.find("._ys_13mq8u1")
@@ -96,7 +120,12 @@ def get_yahoo_news():
     return res
 
 
-def get_r_nba_news():
+def get_r_nba_news() -> list[dict]:
+    """Scrape posts from nba subreddit
+
+    Returns:
+        list[dict]: each dict contains single posts's title, content, and URL.
+    """
     session = HTMLSession()
     r = session.get("https://www.reddit.com/r/nba/top/")
     posts = r.html.find("._1poyrkZ7g36PawDueRza-J")
@@ -120,7 +149,14 @@ def get_r_nba_news():
     return res
 
 
-def get_all_articles():
+def get_all_articles() -> list[dict] | list[Any]:
+    """Unify articles from all sources
+
+    Returns:
+        list[dict] | list[Any]: all articles from all sources
+        with their titles, contents, and URLs.
+        If error returns empty list
+    """
     espn_articles = get_espn_news()
     if espn_articles == 0:
         return []
