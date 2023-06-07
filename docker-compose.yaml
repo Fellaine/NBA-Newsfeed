@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  django-news:
+    build: .
+    container_name: django-news
+    restart: always
+    ports:
+      - "8000:8000"
+    command: >
+      sh -c "python manage.py makemigrations && python manage.py migrate && 
+      python -m celery -A celery -A nbanews worker -l info --detach &&
+      python -m celery -A nbanews beat -l info --detach &&
+      gunicorn nbanews.wsgi:application --bind '0.0.0.0:8000'"
+    depends_on:
+      - redis
+    env_file:
+      - ./.env
+    networks:
+      - NBANewsNetwork
+
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - '6379:6379'
+    volumes: 
+      - redis:/data
+    networks:
+      - NBANewsNetwork
+
+volumes:
+  redis:
+
+networks:
+  NBANewsNetwork:
+    driver: bridge
