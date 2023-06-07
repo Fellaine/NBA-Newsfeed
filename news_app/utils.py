@@ -1,4 +1,3 @@
-import json
 from typing import Literal
 
 import requests
@@ -33,15 +32,13 @@ def get_nba_com_news():
     session = HTMLSession()
     r = session.get("https://www.nba.com/news")
     articles = r.html.find(".ArticleTile_tile__y70gI")
-    # print(articles)
     res = []
-    # article_ = {}
     for article_el in articles:
         article_ = {}
         article_["title"], article_["content"], _ = article_el.text.split(
             "\n"
         )  # not using timestamp rn
-        article_["url"] = article_el.absolute_links.pop()  # get url from set set
+        article_["url"] = article_el.absolute_links.pop()  # get url from set of links
         res.append(article_)
 
     return res
@@ -147,15 +144,3 @@ def get_all_articles():
         article["content"] = article["content"].replace("\\n", " ")
         article["source_id"] = r_nba_source
     return espn_articles + nba_com_articles + yahoo_articles + r_nba_articles
-
-
-# print("ESPN NEWS: ")
-# print(json.dumps(get_espn_news(), indent=4))
-# print("NBA.COM NEWS: ")
-# print(json.dumps(get_nba_com_news(), indent=4))
-# # print("r/NBA NEWS: ")
-# # print(json.dumps(get_r_nba_news_throttled(), indent=4))
-# print("YAHOO NEWS: ")
-# print(json.dumps(get_yahoo_news(), indent=4))
-# print("r/NBA NEWS: ")
-# print(json.dumps(get_r_nba_news(), indent=4))
