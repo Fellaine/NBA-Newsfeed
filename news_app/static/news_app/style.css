@@ -1,0 +1,8 @@
+.line-clamp-5 {
+  word-wrap: break-word;
+  overflow: hidden;
+  /* line-clamp: 6; */ /*not supported by firefox as of time of writing*/
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+}
