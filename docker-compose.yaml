@@ -15,6 +15,7 @@ services:
       gunicorn nbanews.wsgi:application --bind '0.0.0.0:8000'"
     depends_on:
       - redis
+      - db
     env_file:
       - ./.env
     networks:
@@ -25,13 +26,26 @@ services:
     restart: always
     ports:
       - '6379:6379'
-    volumes: 
+    volumes:
       - redis:/data
+    networks:
+      - NBANewsNetwork
+  
+  db:
+    image: postgres:15-alpine
+    env_file:
+      - ./.env
+    restart: always
+    ports:
+      - '5436:5436'
+    volumes:
+      - db-volume:/var/lib/postgresql/data
     networks:
       - NBANewsNetwork
 
 volumes:
   redis:
+  db-volume:
 
 networks:
   NBANewsNetwork:
