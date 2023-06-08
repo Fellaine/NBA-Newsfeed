@@ -12,8 +12,8 @@ services:
     command: >
       sh -c "python manage.py makemigrations && python manage.py migrate &&
       python manage.py collectstatic --noinput &&
-      python -m celery -A celery -A nbanews worker -l info --detach &&
-      python -m celery -A nbanews beat -l info --detach &&
+      python -m celery -A celery -A nbanews worker -l info --detach -f celery.logs &&
+      python -m celery -A nbanews beat -l info --detach -f celerybeat.logs &&
       gunicorn nbanews.wsgi:application --bind '0.0.0.0:8000'"
     depends_on:
       - redis
