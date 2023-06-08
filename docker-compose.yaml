@@ -40,8 +40,8 @@ services:
     env_file:
       - ./.env
     restart: always
-    ports:
-      - '5436:5436'
+    expose:
+      - 5436
     volumes:
       - db-volume:/var/lib/postgresql/data
     networks:
