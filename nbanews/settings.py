@@ -131,6 +131,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 ALLOWED_HOSTS = [os.environ.get("ALLOWED_HOSTS")]
 
+CSRF_TRUSTED_ORIGINS = [
+    os.environ.get("CSRF_TRUSTED_ORIGINS"),
+]
+
 REDIS_HOST = "redis"
 REDIS_PORT = "6379"
 
