@@ -11,7 +11,7 @@ class Source(models.Model):
 class Article(models.Model):
     title = models.TextField(null=False, blank=False)
     content = models.TextField(null=False, blank=False)
-    url = models.URLField(null=False, blank=False, unique=True)
+    url = models.URLField(null=False, blank=False, unique=True, max_length=500)
     source_id = models.ForeignKey(Source, on_delete=models.CASCADE)
 
     def __str__(self):
