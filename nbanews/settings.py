@@ -129,6 +129,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+ALLOWED_HOSTS = [os.environ.get("ALLOWED_HOSTS")]
 
 REDIS_HOST = "redis"
 REDIS_PORT = "6379"
