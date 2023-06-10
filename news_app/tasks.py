@@ -20,11 +20,8 @@ def scrape_articles():
         )
         try:
             article_.save()
-        except IntegrityError:
+        except (IntegrityError, DataError):
             amount_of_already_saved -= 1
-        except DataError:
-            pass
-
     return (
         f"Successfully saved {len(all_articles) + amount_of_already_saved} new articles"
     )
