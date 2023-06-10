@@ -1,4 +1,5 @@
 from django.db import IntegrityError
+from django.db.utils import DataError
 
 from nbanews.celery import app
 
@@ -21,6 +22,8 @@ def scrape_articles():
             article_.save()
         except IntegrityError:
             amount_of_already_saved -= 1
+        except DataError:
+            pass
 
     return (
         f"Successfully saved {len(all_articles) + amount_of_already_saved} new articles"
