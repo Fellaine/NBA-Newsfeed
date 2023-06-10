@@ -138,7 +138,7 @@ def get_r_nba_news() -> list[dict]:
         ):
             for paragraph in post.find("p"):
                 content += paragraph.text + r"\n"
-        url = post.find(".SQnoC3ObvgnGjWt90zD9Z")[0].absolute_links.pop()
+        url = post.find("a")[0].absolute_links.pop()
         res.append(
             {
                 "title": title,
