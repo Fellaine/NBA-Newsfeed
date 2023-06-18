@@ -11,11 +11,10 @@ class ArticleListView(ListView):
     ordering = ["-id"]
 
     def get_queryset(self):
-        query = self.request.GET.get("q")
-        if query:
+        if query := self.request.GET.get("q"):
             object_list = self.model.objects.filter(
                 Q(title__icontains=query) | Q(content__icontains=query)
-            )
+            ).order_by("-id")
         else:
-            object_list = self.model.objects.all()
+            object_list = self.model.objects.all().order_by("-id")
         return object_list
